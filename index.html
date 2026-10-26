@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="EDU NOVA Math: matemáticas para 4.º, 5.º y 6.º de Primaria con temas, actividades y juegos."
+    />
+    <meta name="theme-color" content="#f1ecff" />
+    <title>EDU NOVA Math</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- ============ ENCABEZADO: logo, menú, racha, nivel y sonido ============ -->
+      <header class="top">
+        <div class="wrap">
+          <div class="logo" aria-label="EDU NOVA Math">
+            <span class="brain-icon" aria-hidden="true">🧠</span>
+            <span>EDU<b>NOVA</b></span>
+            <small class="mathtag">Math</small>
+          </div>
+          <nav class="nav" aria-label="Secciones" id="nav">
+            <button data-v="home">Inicio</button><button data-v="temas">Temas</button><button data-v="juegos">Juegos</button
+            ><button data-v="progreso">Progreso</button><button data-v="logros">Logros</button>
+          </nav>
+          <div class="lvl" id="dstr" title="Días seguidos">🔥 <span id="dstrN">1</span> <span id="dstrT">día</span></div>
+          <div class="lvl" title="Tu nivel">
+            ⭐ Nivel <b id="lvN">1</b><i><b id="lvB"></b></i>
+          </div>
+          <button class="snd" id="snd" type="button" aria-label="Activar o silenciar sonido">🔊</button>
+        </div>
+      </header>
+
+      <main class="wrap">
+        <!-- ============ 1. INICIO ============ -->
+        <section class="view" id="v-home" aria-label="Inicio">
+          <div class="hero">
+            <div>
+              <p class="tag" id="hTag">Matemáticas para 4.º, 5.º y 6.º de Primaria</p>
+              <h1>
+                <span id="hWelcome">¡Bienvenido a EDU NOVA Math!</span>
+                <span id="hGreet" class="hide">¡Hola, <span id="hName"></span>!</span>
+              </h1>
+              <p class="mut lead">Aprende con temas y juegos. Tu progreso se guarda en este dispositivo.</p>
+              <div class="card mb18 hide" id="hProfile">
+                <h3>👤 <span id="hpName"></span> · <span id="hpGrade">4</span>.º de Primaria 🔒</h3>
+                <p class="mut">
+                  Tu curso quedó fijado. Todos los temas, juegos y logros son de tu grado. Para cambiarlo debes reiniciar tu
+                  progreso en la sección Progreso.
+                </p>
+              </div>
+              <div class="row row-end mb18" id="hFields">
+                <div class="field">
+                  <label for="inName">Tu nombre</label>
+                  <input type="text" id="inName" maxlength="20" placeholder="Escribe tu nombre" autocomplete="off" />
+                </div>
+                <div class="field">
+                  <label for="inGrade">Tu grado</label>
+                  <select id="inGrade">
+                    <option value="4">4.º de Primaria</option>
+                    <option value="5">5.º de Primaria</option>
+                    <option value="6">6.º de Primaria</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <button class="btn p" id="start" type="button">🚀 Comenzar</button>
+                <button class="btn m hide" id="cont" type="button">▶ Continuar</button>
+              </div>
+              <p class="mut mt16">Temas completados de tu curso: <span id="homeDone">0</span> de 5</p>
+            </div>
+            <div class="nova">
+              <div class="bubble">¡Hola! Soy Nova, tu robot guía. ¡Vamos a aprender!</div>
+              <div class="novawrap">
+                <img
+                  class="nova-svg"
+                  data-nova
+                  src="assets/nova.svg"
+                  width="200"
+                  height="256"
+                  alt="Nova, tu guía robot espacial"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ 2. TEMAS (lista, lección, práctica y actividad) ============ -->
+        <section class="view" id="v-temas" aria-label="Temas">
+          <!-- 2.1 Lista de temas por grado -->
+          <div id="temasList">
+            <h2 id="temasTitle">Temas por grado</h2>
+            <p class="mut" id="temasSub">Elige un grado y un tema. Completa cada tema con 6 aciertos de 10.</p>
+            <div class="card rec-card" id="recCard">
+              <img class="nova-svg" data-nova src="assets/nova.svg" width="64" height="82" alt="Nova, tu guía robot espacial" />
+              <div><b id="recTitle">Nova recomienda</b><br /><span class="mut" id="recText"></span></div>
+              <button class="btn sm m" id="recGo" type="button">Empezar</button>
+            </div>
+            <div class="tabs" role="group" aria-label="Grado" id="gradeTabs">
+              <button data-g="4" aria-pressed="false">4.º de Primaria</button
+              ><button data-g="5" aria-pressed="false">5.º de Primaria</button
+              ><button data-g="6" aria-pressed="false">6.º de Primaria</button>
+            </div>
+            <div class="grid g3 stag" id="topicGrid">
+              <button class="card topic c-sky" data-t="t4_1" data-g="4">
+                <span class="ic">🔢</span><span class="chip">Tema 1 · <span class="t-state">Nuevo</span></span>
+                <h3>Números naturales y operaciones básicas</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-mint" data-t="t4_2" data-g="4">
+                <span class="ic">✖️</span><span class="chip">Tema 2 · <span class="t-state">Nuevo</span></span>
+                <h3>Multiplicación y división</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-sun" data-t="t4_3" data-g="4">
+                <span class="ic">🍕</span><span class="chip">Tema 3 · <span class="t-state">Nuevo</span></span>
+                <h3>Fracciones y equivalencias</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-coral" data-t="t4_4" data-g="4">
+                <span class="ic">📏</span><span class="chip">Tema 4 · <span class="t-state">Nuevo</span></span>
+                <h3>Medidas de longitud, masa y capacidad</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-violet" data-t="t4_5" data-g="4">
+                <span class="ic">🔷</span><span class="chip">Tema 5 · <span class="t-state">Nuevo</span></span>
+                <h3>Figuras geométricas y perímetro</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-sky" data-t="t5_1" data-g="5">
+                <span class="ic">🔟</span><span class="chip">Tema 1 · <span class="t-state">Nuevo</span></span>
+                <h3>Números decimales</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-sun" data-t="t5_2" data-g="5">
+                <span class="ic">🍰</span><span class="chip">Tema 2 · <span class="t-state">Nuevo</span></span>
+                <h3>Fracciones y operaciones</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-mint" data-t="t5_3" data-g="5">
+                <span class="ic">🔗</span><span class="chip">Tema 3 · <span class="t-state">Nuevo</span></span>
+                <h3>Múltiplos y divisores</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-violet" data-t="t5_4" data-g="5">
+                <span class="ic">📦</span><span class="chip">Tema 4 · <span class="t-state">Nuevo</span></span>
+                <h3>Área y volumen</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-coral" data-t="t5_5" data-g="5">
+                <span class="ic">🧺</span><span class="chip">Tema 5 · <span class="t-state">Nuevo</span></span>
+                <h3>Problemas matemáticos aplicados</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-sky" data-t="t6_1" data-g="6">
+                <span class="ic">🧮</span><span class="chip">Tema 1 · <span class="t-state">Nuevo</span></span>
+                <h3>Operaciones combinadas</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-coral" data-t="t6_2" data-g="6">
+                <span class="ic">💯</span><span class="chip">Tema 2 · <span class="t-state">Nuevo</span></span>
+                <h3>Porcentajes y proporcionalidad</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-mint" data-t="t6_3" data-g="6">
+                <span class="ic">🌡️</span><span class="chip">Tema 3 · <span class="t-state">Nuevo</span></span>
+                <h3>Números enteros</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-violet" data-t="t6_4" data-g="6">
+                <span class="ic">📐</span><span class="chip">Tema 4 · <span class="t-state">Nuevo</span></span>
+                <h3>Geometría avanzada</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+              <button class="card topic c-sun" data-t="t6_5" data-g="6">
+                <span class="ic">🕵️</span><span class="chip">Tema 5 · <span class="t-state">Nuevo</span></span>
+                <h3>Resolución de problemas y razonamiento lógico</h3>
+                <span class="stars" role="img" aria-label="Estrellas del tema"><span>★</span><span>★</span><span>★</span></span
+                ><span class="bar"><i class="t-bar"></i></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2.2 Lección de un tema -->
+          <div id="lesson" class="hide">
+            <div class="row mb12">
+              <button class="btn sm" id="backT" type="button">← Temas</button>
+              <span class="chip" id="lessonChip"></span>
+            </div>
+            <div class="steps-nav" id="stepsNav">
+              <button data-s="0" aria-current="false">1. Aprende</button
+              ><button data-s="1" aria-current="false">2. Ejemplos</button
+              ><button data-s="2" aria-current="false">3. Práctica</button
+              ><button data-s="3" aria-current="false">4. Actividad</button>
+            </div>
+
+            <!-- Paso 1: Aprende -->
+            <div id="step0" class="card step-panel hide">
+              <div class="row nowrap start">
+                <div class="flex-none">
+                  <img
+                    class="nova-svg"
+                    data-nova
+                    src="assets/nova.svg"
+                    width="90"
+                    height="115"
+                    alt="Nova, tu guía robot espacial"
+                  />
+                </div>
+                <div class="minw0">
+                  <h3 class="mb8" id="s0Title"></h3>
+                  <div id="s0Intro">
+                    <p class="q intro-line"></p>
+                    <p class="q intro-line"></p>
+                    <p class="q intro-line"></p>
+                  </div>
+                  <div class="rec mt12 tip-line"><span class="ic">💡</span><span id="s0Tip"></span></div>
+                </div>
+              </div>
+              <div class="row mt18">
+                <button class="btn p" id="s0Next" type="button">Siguiente →</button>
+              </div>
+            </div>
+
+            <!-- Paso 2: Ejemplos -->
+            <div id="step1" class="step-panel hide">
+              <div class="grid g2" id="s1Grid">
+                <div class="card ex">
+                  <h3>Ejemplo 1</h3>
+                  <p class="q q-sm ex-t"></p>
+                  <div class="vis ex-v"></div>
+                  <button class="btn sm s ex-btn" data-r="0">Ver solución</button>
+                  <p class="fb ok hide ex-r"></p>
+                </div>
+                <div class="card ex">
+                  <h3>Ejemplo 2</h3>
+                  <p class="q q-sm ex-t"></p>
+                  <div class="vis ex-v"></div>
+                  <button class="btn sm s ex-btn" data-r="1">Ver solución</button>
+                  <p class="fb ok hide ex-r"></p>
+                </div>
+              </div>
+              <div class="row mt18">
+                <button class="btn p" id="s1Next" type="button">Siguiente →</button>
+              </div>
+            </div>
+
+            <!-- Paso 3: Práctica (10 preguntas) -->
+            <div id="step2" class="step-panel hide">
+              <div class="card" id="pq">
+                <div class="hud">
+                  <span class="chip">Pregunta <span id="pqN">1</span> de 10</span>
+                  <span class="chip" title="Dificultad">Nivel <span id="pqLv">●○○</span></span>
+                  <span class="chip">✔ <span id="pqOk">0</span> · 🔥 <span id="pqStreak">0</span></span>
+                </div>
+                <div class="bar"><i id="pqBar"></i></div>
+                <div class="q" id="pqText"></div>
+                <div class="vis hide" id="pqVis"></div>
+                <div class="opts" id="pqOpts">
+                  <button class="opt" type="button"></button><button class="opt" type="button"></button
+                  ><button class="opt" type="button"></button><button class="opt" type="button"></button>
+                </div>
+                <div id="pqInputBox" class="hide">
+                  <div class="ans">
+                    <input
+                      type="text"
+                      inputmode="none"
+                      id="inA"
+                      placeholder="Tu respuesta"
+                      autocomplete="off"
+                      aria-label="Tu respuesta"
+                    />
+                  </div>
+                  <div class="kp" id="kpPractice">
+                    <button type="button" class="" data-k="7">7</button><button type="button" class="" data-k="8">8</button
+                    ><button type="button" class="" data-k="9">9</button><button type="button" class="" data-k="⌫">⌫</button
+                    ><button type="button" class="" data-k="4">4</button><button type="button" class="" data-k="5">5</button
+                    ><button type="button" class="" data-k="6">6</button><button type="button" class="" data-k="−">−</button
+                    ><button type="button" class="" data-k="1">1</button><button type="button" class="" data-k="2">2</button
+                    ><button type="button" class="" data-k="3">3</button><button type="button" class="" data-k=",">,</button
+                    ><button type="button" class="" data-k="0">0</button
+                    ><button type="button" class="send" data-k="Enviar">Enviar</button>
+                  </div>
+                </div>
+                <div class="opt hide" id="pqYour">Tu respuesta: <span id="pqYourV"></span></div>
+                <div class="fb mini hide" id="pqFb" role="status">
+                  <img
+                    class="nova-svg"
+                    data-nova
+                    src="assets/nova.svg"
+                    width="56"
+                    height="72"
+                    alt="Nova, tu guía robot espacial"
+                  />
+                  <span><b id="pqFbHead"></b> <span id="pqFbExp"></span></span>
+                </div>
+                <div class="row mt14 hide" id="pqNextRow">
+                  <button class="btn p" id="nq" type="button">Siguiente →</button>
+                </div>
+              </div>
+
+              <!-- Resultado de la práctica -->
+              <div class="card center hide" id="pEnd">
+                <div class="novawrap p6">
+                  <img
+                    class="nova-svg"
+                    data-nova
+                    src="assets/nova.svg"
+                    width="120"
+                    height="154"
+                    alt="Nova, tu guía robot espacial"
+                  />
+                </div>
+                <h2 id="pEndMsg"></h2>
+                <p class="stars stars-lg" id="pEndStars"><span>★</span><span>★</span><span>★</span></p>
+                <p class="big">Acertaste <b id="pEndOk">0</b> de 10 (<span id="pEndPct">0</span>%)</p>
+                <p class="mut">
+                  +<span id="pEndXp">0</span> puntos ganados<span id="pEndNew" class="hide"> · ¡Tema nuevo completado!</span>
+                </p>
+                <div class="row center mt18">
+                  <button class="btn p" id="again" type="button">Practicar otra vez</button>
+                  <button class="btn m" id="toLab" type="button">Actividad práctica →</button>
+                  <button class="btn" id="toList" type="button">Más temas</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Paso 4: Actividad práctica -->
+            <div id="step3" class="step-panel hide">
+              <div class="card" id="lab">
+                <h3>Actividad práctica</h3>
+
+                <!-- Fracciones: pintar la barra -->
+                <div id="labFrac" class="lab-panel hide">
+                  <p class="q" id="lfQ"></p>
+                  <div class="fbar" id="lfBar">
+                    <button type="button" aria-label="Parte 1"></button><button type="button" aria-label="Parte 2"></button
+                    ><button type="button" aria-label="Parte 3"></button><button type="button" aria-label="Parte 4"></button
+                    ><button type="button" aria-label="Parte 5"></button><button type="button" aria-label="Parte 6"></button
+                    ><button type="button" aria-label="Parte 7"></button><button type="button" aria-label="Parte 8"></button>
+                  </div>
+                  <p class="mut center my10">Pintadas: <span id="lfCount">0</span> de <span id="lfTotal">0</span></p>
+                  <div class="row center">
+                    <button class="btn p" id="lfChk" type="button">Comprobar</button>
+                  </div>
+                </div>
+
+                <!-- Geometría: rectángulo o circunferencia con deslizadores -->
+                <div id="labRect" class="lab-panel hide">
+                  <p class="q" id="lrQ"></p>
+                  <div id="lrCircle" class="hide">
+                    <div class="sl">
+                      <label for="sr">Radio</label><input type="range" id="sr" min="1" max="10" value="3" /><b id="vr"></b>
+                    </div>
+                  </div>
+                  <div id="lrRectBox" class="hide">
+                    <div class="sl">
+                      <label for="sw">Largo</label><input type="range" id="sw" min="1" max="12" value="3" /><b id="vw"></b>
+                    </div>
+                    <div class="sl">
+                      <label for="sh">Ancho</label><input type="range" id="sh" min="1" max="12" value="3" /><b id="vh"></b>
+                    </div>
+                  </div>
+                  <div class="vis" id="rv"></div>
+                  <p class="center" id="rn"></p>
+                  <div class="row center">
+                    <button class="btn p" id="lrChk" type="button">Comprobar</button>
+                  </div>
+                </div>
+
+                <!-- Ordenar números -->
+                <div id="labOrder" class="lab-panel hide">
+                  <p class="q">Toca los números de <b>menor a mayor</b>.</p>
+                  <div class="chips" id="loChips">
+                    <button class="opt" type="button"></button><button class="opt" type="button"></button
+                    ><button class="opt" type="button"></button><button class="opt" type="button"></button>
+                  </div>
+                  <p class="mut center mt12">Orden: <span id="loSeq">…</span></p>
+                </div>
+
+                <!-- Porcentajes: cuadrícula de 100 -->
+                <div id="labPct" class="lab-panel hide">
+                  <p class="q">Pinta el <b id="lpP"></b>% de la cuadrícula (100 cuadritos).</p>
+                  <div class="pct" id="pg">
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  </div>
+                  <p class="center my10" id="pc"></p>
+                  <div class="row center">
+                    <button class="btn p" id="lpChk" type="button">Comprobar</button>
+                  </div>
+                </div>
+
+                <!-- Unir parejas -->
+                <div id="labPairs" class="lab-panel hide">
+                  <p class="q">Une cada pregunta con su respuesta.</p>
+                  <div class="pairs">
+                    <div class="grid" id="lpL">
+                      <button class="opt" type="button"></button><button class="opt" type="button"></button
+                      ><button class="opt" type="button"></button>
+                    </div>
+                    <div class="grid" id="lpR">
+                      <button class="opt" type="button"></button><button class="opt" type="button"></button
+                      ><button class="opt" type="button"></button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Mensajes comunes de las actividades -->
+                <div class="fb bad hide" id="labBad" role="status"></div>
+                <div class="fb ok hide" id="labOk" role="status">🎉 <span id="labOkMsg"></span> <span id="labBonus"></span></div>
+                <div class="row mt12 hide" id="labEnd">
+                  <button class="btn p" id="again2" type="button">Otra actividad</button>
+                  <button class="btn" id="toList2" type="button">Más temas</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ 3. JUEGOS ============ -->
+        <section class="view" id="v-juegos" aria-label="Juegos">
+          <!-- 3.1 Catálogo de juegos -->
+          <div id="gList">
+            <h2>Juegos matemáticos</h2>
+            <p class="mut">Gana puntos, medallas y recompensas. Cada partida queda registrada en tu progreso.</p>
+            <div class="grid gg stag mt16" id="gGrid">
+              <button class="card gcard c-sky" data-g="reto">
+                <span class="deco">⚡</span><span class="deco">🔥</span><span class="ic">⏱️</span>
+                <h3>Reto Matemático</h3>
+                <span class="mut">Resuelve operaciones contra el reloj. Tienes hasta 2 minutos y puedes ir con calma.</span
+                ><span class="row"
+                  ><span class="chip">Mejor: <b class="g-best">0</b></span
+                  ><span class="chip">Partidas: <b class="g-plays">0</b></span
+                  ><span class="chip g-medal">😊</span></span
+                ></button
+              ><button class="card gcard c-mint" data-g="aventura">
+                <span class="deco">🪐</span><span class="deco">☄️</span><span class="ic">🚀</span>
+                <h3>Aventura Numérica</h3>
+                <span class="mut">Haz avanzar a Nova por 12 planetas resolviendo desafíos. Tienes 5 vidas.</span
+                ><span class="row"
+                  ><span class="chip">Mejor: <b class="g-best">0</b></span
+                  ><span class="chip">Partidas: <b class="g-plays">0</b></span
+                  ><span class="chip g-medal">😊</span></span
+                ></button
+              ><button class="card gcard c-violet" data-g="detective">
+                <span class="deco">🕵️</span><span class="deco">❓</span><span class="ic">🔍</span>
+                <h3>Detective Matemático</h3>
+                <span class="mut"
+                  >Lee las pistas y toca al sospechoso que las cumple todas. ¡Descarta números y atrapa al culpable!</span
+                ><span class="row"
+                  ><span class="chip">Mejor: <b class="g-best">0</b></span
+                  ><span class="chip">Partidas: <b class="g-plays">0</b></span
+                  ><span class="chip g-medal">😊</span></span
+                ></button
+              ><button class="card gcard c-sun" data-g="construye">
+                <span class="deco">📐</span><span class="deco">🧱</span><span class="ic">🏗️</span>
+                <h3>Construye y Calcula</h3>
+                <span class="mut">Levanta figuras en la cuadrícula usando perímetro y área. Tienes 5 minutos.</span
+                ><span class="row"
+                  ><span class="chip">Mejor: <b class="g-best">0</b></span
+                  ><span class="chip">Partidas: <b class="g-plays">0</b></span
+                  ><span class="chip g-medal">😊</span></span
+                >
+              </button>
+            </div>
+          </div>
+
+          <!-- 3.2 Configuración de una partida -->
+          <div id="gSetup" class="hide">
+            <div class="row mb12">
+              <button class="btn sm" id="back" type="button">← Juegos</button>
+            </div>
+            <div class="card" id="gsetup">
+              <div class="gcard">
+                <span class="ic" id="gsIc"></span>
+                <h2 id="gsName"></h2>
+                <p class="mut" id="gsDesc"></p>
+              </div>
+              <h3 class="mt16" id="gsGradeH">Grado</h3>
+              <p class="mut hide" id="gsFixed"></p>
+              <div class="tabs tight" id="gsGrades">
+                <button data-gr="4" aria-pressed="false">4.º</button><button data-gr="5" aria-pressed="false">5.º</button
+                ><button data-gr="6" aria-pressed="false">6.º</button>
+              </div>
+              <div id="gsDiffBox">
+                <h3>Dificultad</h3>
+                <div class="tabs tight" id="gsDiffs">
+                  <button data-df="1" aria-pressed="false">Fácil</button><button data-df="2" aria-pressed="false">Medio</button
+                  ><button data-df="3" aria-pressed="false">Difícil</button>
+                </div>
+              </div>
+              <p class="mut mt8 mb16">Medallas: 🥉 bronce, 🥈 plata, 🥇 oro.</p>
+              <button class="btn p" id="play" type="button">▶ Jugar</button>
+            </div>
+          </div>
+
+          <!-- 3.3 Escenario de juego -->
+          <div id="gStage" class="hide">
+            <div class="row mb12">
+              <button class="btn sm" id="exit" type="button">✕ Salir del juego</button>
+            </div>
+
+            <!-- Cuenta regresiva -->
+            <div class="card center count-card hide" id="gCount">
+              <div class="medal count-n" id="gCountN">3</div>
+              <p class="mut">¡Prepárate!</p>
+            </div>
+
+            <!-- Juego 1: Reto Matemático -->
+            <div class="card hide" id="gReto">
+              <div class="hud">
+                <span class="chip" id="rTm">⏱ 120s</span>
+                <span class="chip">⭐ <span id="rScore">0</span></span>
+                <span class="chip" id="rComboChip">🔥 Combo <span id="rCombo">0</span></span>
+                <span class="chip">✔ <span id="rOk">0</span></span>
+              </div>
+              <div class="bar"><i id="rBar" class="bar-coral"></i></div>
+              <div class="q" id="rQ"></div>
+              <div class="ans">
+                <input type="text" inputmode="none" id="ra" placeholder="Respuesta" autocomplete="off" aria-label="Respuesta" />
+              </div>
+              <div class="kp" id="kpReto">
+                <button type="button" class="" data-k="7">7</button><button type="button" class="" data-k="8">8</button
+                ><button type="button" class="" data-k="9">9</button><button type="button" class="" data-k="⌫">⌫</button
+                ><button type="button" class="" data-k="4">4</button><button type="button" class="" data-k="5">5</button
+                ><button type="button" class="" data-k="6">6</button><button type="button" class="" data-k="−">−</button
+                ><button type="button" class="" data-k="1">1</button><button type="button" class="" data-k="2">2</button
+                ><button type="button" class="" data-k="3">3</button><button type="button" class="" data-k=",">,</button
+                ><button type="button" class="" data-k="0">0</button
+                ><button type="button" class="send" data-k="Enviar">Enviar</button>
+              </div>
+              <p class="mut mt10 minh24" id="rf"></p>
+            </div>
+
+            <!-- Juego 2: Aventura Numérica -->
+            <div class="card hide" id="gAv">
+              <div class="hud">
+                <span class="chip">Planeta <span id="aPos">1</span> de 12</span>
+                <span class="chip" id="aLives">❤️❤️❤️❤️❤️</span>
+              </div>
+              <div class="track" id="aTrack" aria-label="Recorrido">
+                <span class="cell" data-e="🏠">🏠</span><span class="cell" data-e="🌙">🌙</span
+                ><span class="cell" data-e="☄️">☄️</span><span class="cell" data-e="🪐">🪐</span
+                ><span class="cell" data-e="🛰️">🛰️</span><span class="cell" data-e="⭐">⭐</span
+                ><span class="cell" data-e="🌍">🌍</span><span class="cell" data-e="🌕">🌕</span
+                ><span class="cell" data-e="🔭">🔭</span><span class="cell" data-e="🌠">🌠</span
+                ><span class="cell" data-e="👽">👽</span><span class="cell" data-e="🪐">🪐</span
+                ><span class="cell" data-e="🏁">🏁</span>
+              </div>
+              <div class="q" id="aQ"></div>
+              <div class="vis hide" id="aVis"></div>
+              <div class="opts" id="aOpts">
+                <button class="opt" type="button"></button><button class="opt" type="button"></button
+                ><button class="opt" type="button"></button><button class="opt" type="button"></button>
+              </div>
+              <div class="fb hide" id="aFb"><span id="aFbHead"></span> <span id="aFbExp"></span></div>
+              <div class="row mt12 hide" id="aNextRow">
+                <button class="btn p" id="cnA" type="button">Continuar</button>
+              </div>
+            </div>
+
+            <!-- Juego 3: Detective Matemático -->
+            <div class="card hide" id="gDet">
+              <div class="hud">
+                <span class="chip">Caso <span id="dCase">1</span> de 5</span>
+                <span class="chip">⭐ <span id="dScore">0</span></span>
+                <span class="chip">Vale <span id="dPts">30</span> pts</span>
+              </div>
+              <h3 id="dTitle"></h3>
+              <p class="mut">Lee las pistas y toca al sospechoso que las cumple todas.</p>
+              <div id="dClues">
+                <div class="clue"><span aria-hidden="true">🔎</span> <span class="clue-t"></span></div>
+                <div class="clue"><span aria-hidden="true">🔎</span> <span class="clue-t"></span></div>
+                <div class="clue"><span aria-hidden="true">🔎</span> <span class="clue-t"></span></div>
+              </div>
+              <div class="chips my14" id="dSusp">
+                <button class="opt" type="button"></button><button class="opt" type="button"></button
+                ><button class="opt" type="button"></button><button class="opt" type="button"></button>
+              </div>
+              <p class="mut hide" id="dMsg"></p>
+              <div class="fb ok hide" id="dWin">✅ ¡Caso resuelto! El número era <b id="dAns"></b>.</div>
+              <div class="row mt12">
+                <button class="btn sm s" id="dh" type="button">💡 Descartar uno (−5)</button>
+                <button class="btn p hide" id="cnD" type="button">Siguiente caso →</button>
+              </div>
+            </div>
+
+            <!-- Juego 4: Construye y Calcula -->
+            <div class="card hide" id="gCon">
+              <div class="hud">
+                <span class="chip" id="cTm">⏱ 300s</span>
+                <span class="chip">Reto <span id="cR">1</span> de 5</span>
+                <span class="chip">✔ <span id="cOk">0</span></span>
+              </div>
+              <p class="q" id="cQ"></p>
+              <p class="mut">Cada cuadrito mide 1 m × 1 m. Toca o arrastra para construir.</p>
+              <div class="build" id="bg">
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div>
+              </div>
+              <p class="center my10" id="bl">Área: <b>0 m²</b> · Perímetro: <b>0 m</b></p>
+              <p class="mut center minh24" id="bf"></p>
+              <div class="row center">
+                <button class="btn p" id="bk" type="button">Comprobar</button>
+                <button class="btn sm" id="bc" type="button">Borrar todo</button>
+                <button class="btn sm s" id="bh" type="button">💡 Pista (−5)</button>
+                <button class="btn sm" id="bs" type="button">Saltar</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ 4. PROGRESO ============ -->
+        <section class="view" id="v-progreso" aria-label="Progreso">
+          <h2>Mi progreso</h2>
+          <div class="card row gap24 my16">
+            <div class="donut" id="pDonut">
+              <div>
+                <span><span id="pDonutN">0</span>%</span>
+              </div>
+            </div>
+            <div class="grow minw200">
+              <h3><span id="pName">Explorador</span> · <span id="pGrade">4</span>.º de Primaria</h3>
+              <span class="chip mt6">🔥 <span id="pStreak">1</span> <span id="pStreakT">día</span> seguidos</span>
+              <div class="tabs tight" id="pgTabs">
+                <button data-pg="4" aria-pressed="false">4.º</button><button data-pg="5" aria-pressed="false">5.º</button
+                ><button data-pg="6" aria-pressed="false">6.º</button>
+              </div>
+            </div>
+          </div>
+          <div class="grid g3 mb16">
+            <div class="card stat">
+              <b id="pDone"></b><span>temas completados en <span id="pDoneG">4</span>.º</span>
+            </div>
+            <div class="card stat"><b id="pXp"></b><span>puntos acumulados</span></div>
+            <div class="card stat"><b id="pAcc"></b><span>de respuestas correctas</span></div>
+            <div class="card stat"><b id="pAll"></b><span id="pAllT">temas en total</span></div>
+            <div class="card stat"><b id="pPlayed"></b><span>partidas jugadas</span></div>
+            <div class="card stat"><b id="pBadges"></b><span>logros desbloqueados</span></div>
+          </div>
+          <div class="grid g2">
+            <div class="card" id="pRows">
+              <h3>Avance por tema</h3>
+              <div class="prow">
+                <div class="row between"><span class="p-name"></span><b class="p-best">0%</b></div>
+                <div class="bar"><i class="p-bar"></i></div>
+                <small class="mut p-info">Sin practicar</small>
+              </div>
+              <div class="prow">
+                <div class="row between"><span class="p-name"></span><b class="p-best">0%</b></div>
+                <div class="bar"><i class="p-bar"></i></div>
+                <small class="mut p-info">Sin practicar</small>
+              </div>
+              <div class="prow">
+                <div class="row between"><span class="p-name"></span><b class="p-best">0%</b></div>
+                <div class="bar"><i class="p-bar"></i></div>
+                <small class="mut p-info">Sin practicar</small>
+              </div>
+              <div class="prow">
+                <div class="row between"><span class="p-name"></span><b class="p-best">0%</b></div>
+                <div class="bar"><i class="p-bar"></i></div>
+                <small class="mut p-info">Sin practicar</small>
+              </div>
+              <div class="prow">
+                <div class="row between"><span class="p-name"></span><b class="p-best">0%</b></div>
+                <div class="bar"><i class="p-bar"></i></div>
+                <small class="mut p-info">Sin practicar</small>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Recomendaciones</h3>
+              <div class="pill-list mt10" id="pRecs">
+                <div class="rec hide">
+                  <span class="ic"></span><span class="grow"></span><button class="btn sm s" type="button">Ir</button>
+                </div>
+                <div class="rec hide">
+                  <span class="ic"></span><span class="grow"></span><button class="btn sm s" type="button">Ir</button>
+                </div>
+                <div class="rec hide">
+                  <span class="ic"></span><span class="grow"></span><button class="btn sm s" type="button">Ir</button>
+                </div>
+                <div class="rec hide">
+                  <span class="ic"></span><span class="grow"></span><button class="btn sm s" type="button">Ir</button>
+                </div>
+              </div>
+              <h3 class="mt20">Fortalezas</h3>
+              <p class="mut" id="pStr"></p>
+              <h3 class="mt14">Áreas de mejora</h3>
+              <p class="mut" id="pWeak"></p>
+            </div>
+          </div>
+          <div class="grid g2 mt16">
+            <div class="card" id="pGames">
+              <h3>Juegos: mejor puntaje</h3>
+              <div class="grow-row" data-gp="reto">
+                <div class="row between">
+                  <span>Reto Matemático</span><b><span class="gp-best">0</span> <span class="gp-medal"></span></b>
+                </div>
+                <div class="bar"><i class="gp-bar"></i></div>
+              </div>
+              <div class="grow-row" data-gp="aventura">
+                <div class="row between">
+                  <span>Aventura Numérica</span><b><span class="gp-best">0</span> <span class="gp-medal"></span></b>
+                </div>
+                <div class="bar"><i class="gp-bar"></i></div>
+              </div>
+              <div class="grow-row" data-gp="detective">
+                <div class="row between">
+                  <span>Detective Matemático</span><b><span class="gp-best">0</span> <span class="gp-medal"></span></b>
+                </div>
+                <div class="bar"><i class="gp-bar"></i></div>
+              </div>
+              <div class="grow-row" data-gp="construye">
+                <div class="row between">
+                  <span>Construye y Calcula</span><b><span class="gp-best">0</span> <span class="gp-medal"></span></b>
+                </div>
+                <div class="bar"><i class="gp-bar"></i></div>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Últimos resultados</h3>
+              <div class="scroll hide" id="pLogWrap">
+                <table class="log" id="pLog">
+                  <tr>
+                    <th>Juego</th>
+                    <th>Puntos</th>
+                    <th>Tiempo</th>
+                    <th>Medalla</th>
+                  </tr>
+                  <tr class="hide">
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="hide">
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="hide">
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="hide">
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="hide">
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="hide">
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="hide">
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="hide">
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </table>
+              </div>
+              <p class="mut" id="pLogEmpty">Aún no hay partidas. ¡Juega la primera!</p>
+            </div>
+          </div>
+          <div class="mt24">
+            <button class="btn sm" id="rst" type="button">Borrar mi progreso</button>
+          </div>
+        </section>
+
+        <!-- ============ 5. LOGROS ============ -->
+        <section class="view" id="v-logros" aria-label="Logros">
+          <h2 id="lgTitle">Logros</h2>
+          <div class="card row gap20 my16">
+            <img class="nova-svg" data-nova src="assets/nova.svg" width="100" height="128" alt="Nova, tu guía robot espacial" />
+            <div class="grow minw200">
+              <span class="chip">Tu nivel</span>
+              <h2>Nivel <span id="lgLv">1</span> · <span id="lgName">Cadete</span></h2>
+              <p class="mut my6">
+                <span id="lgXp">0</span> puntos · <span id="lgNext">150</span> para el nivel <span id="lgLv2">2</span> ·
+                <span id="lgGot">0</span> de <span id="lgTotal">20</span> logros
+              </p>
+              <div class="bar"><i id="lgBar" class="bar-sun"></i></div>
+            </div>
+          </div>
+          <h3 class="sec-h">🏅 Medallas</h3>
+          <div class="grid g3">
+            <div class="card badge lock" data-b="maestro" data-n="Maestro de las operaciones" data-i="🧮">
+              <span class="ic">🔒</span><b>Maestro de las operaciones</b
+              ><small>Completa un tema de operaciones:números naturales,multiplicación,decimales u operaciones combinadas.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="fracc" data-n="Experto en fracciones" data-i="🍕">
+              <span class="ic">🔒</span><b>Experto en fracciones</b><small>Completa el tema de fracciones de 4.º o 5.º.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="campeon" data-n="Campeón matemático" data-i="🥇">
+              <span class="ic">🔒</span><b>Campeón matemático</b><small>Reúne 1000 puntos.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="geo" data-n="Explorador geométrico" data-i="🔷">
+              <span class="ic">🔒</span><b>Explorador geométrico</b><small>Completa un tema de figuras,área o geometría.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="prob" data-n="Resolutor de problemas" data-i="🧩">
+              <span class="ic">🔒</span><b>Resolutor de problemas</b><small>Completa un tema de problemas o razonamiento.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+          </div>
+          <h3 class="sec-h">⭐ Insignias</h3>
+          <div class="grid g3">
+            <div class="card badge lock" data-b="const" data-n="Constante" data-i="📅">
+              <span class="ic">🔒</span><b>Constante</b><small>Visita EDU NOVA Math 3 días seguidos.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="paso" data-n="Primer paso" data-i="👣">
+              <span class="ic">🔒</span><b>Primer paso</b><small>Responde bien tu primera pregunta.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="racha" data-n="Racha de fuego" data-i="🔥">
+              <span class="ic">🔒</span><b>Racha de fuego</b><small>Acierta 5 preguntas seguidas.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="racha10" data-n="Imparable" data-i="⚡">
+              <span class="ic">🔒</span><b>Imparable</b><small>Acierta 10 preguntas seguidas.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="veloz" data-n="Velocista" data-i="⏱️">
+              <span class="ic">🔒</span><b>Velocista</b><small>Resuelve 8 operaciones en un Reto Matemático.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="viajero" data-n="Viajero estelar" data-i="🚀">
+              <span class="ic">🔒</span><b>Viajero estelar</b><small>Llega al final de la Aventura Numérica.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="detective" data-n="Ojo de detective" data-i="🔍">
+              <span class="ic">🔒</span><b>Ojo de detective</b><small>Resuelve 5 casos de Detective Matemático.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="constructor" data-n="Constructor" data-i="🏗️">
+              <span class="ic">🔒</span><b>Constructor</b><small>Completa 3 construcciones.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="manos" data-n="Manos a la obra" data-i="🧪">
+              <span class="ic">🔒</span><b>Manos a la obra</b><small>Completa 3 actividades prácticas.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+          </div>
+          <h3 class="sec-h">🏆 Trofeos</h3>
+          <div class="grid g3">
+            <div class="card badge lock" data-b="oro" data-n="Trofeo de oro" data-i="🏆">
+              <span class="ic">🔒</span><b>Trofeo de oro</b><small>Gana una medalla de oro en un juego.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="g4" data-n="Trofeo de 4.º" data-i="🥉">
+              <span class="ic">🔒</span><b>Trofeo de 4.º</b><small>Completa los 5 temas de 4.º.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="g5" data-n="Trofeo de 5.º" data-i="🥈">
+              <span class="ic">🔒</span><b>Trofeo de 5.º</b><small>Completa los 5 temas de 5.º.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="g6" data-n="Trofeo de 6.º" data-i="🥇">
+              <span class="ic">🔒</span><b>Trofeo de 6.º</b><small>Completa los 5 temas de 6.º.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="estrella" data-n="Trofeo Estrella" data-i="🌟">
+              <span class="ic">🔒</span><b>Trofeo Estrella</b><small>Llega al nivel 5.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+            <div class="card badge lock" data-b="nova" data-n="Gran Trofeo Nova" data-i="👑">
+              <span class="ic">🔒</span><b>Gran Trofeo Nova</b><small>Completa los 5 temas de tu curso con 3 estrellas.</small
+              ><span class="chip b-state">Pendiente</span>
+            </div>
+          </div>
+          <h3 class="sec-h">🎁 Recompensas virtuales</h3>
+          <p class="mut mb10">Sube de nivel para vestir a Nova.</p>
+          <div class="grid g3" id="accGrid">
+            <button class="card badge acc-btn lock" data-a="" data-req="1" disabled>
+              <img class="nova-svg" src="assets/nova.svg" width="70" height="90" alt="Nova, tu guía robot espacial" /><b
+                >Sin accesorio</b
+              ><small class="a-state">Nivel 1</small></button
+            ><button class="card badge acc-btn lock" data-a="gafas" data-req="2" disabled>
+              <img class="nova-svg" src="assets/nova.svg#gafas" width="70" height="90" alt="Nova, tu guía robot espacial" /><b
+                >Gafas estelares</b
+              ><small class="a-state">Nivel 2</small></button
+            ><button class="card badge acc-btn lock" data-a="gorra" data-req="3" disabled>
+              <img class="nova-svg" src="assets/nova.svg#gorra" width="70" height="90" alt="Nova, tu guía robot espacial" /><b
+                >Gorra espacial</b
+              ><small class="a-state">Nivel 3</small></button
+            ><button class="card badge acc-btn lock" data-a="capa" data-req="5" disabled>
+              <img class="nova-svg" src="assets/nova.svg#capa" width="70" height="90" alt="Nova, tu guía robot espacial" /><b
+                >Capa de héroe</b
+              ><small class="a-state">Nivel 5</small></button
+            ><button class="card badge acc-btn lock" data-a="corona" data-req="7" disabled>
+              <img class="nova-svg" src="assets/nova.svg#corona" width="70" height="90" alt="Nova, tu guía robot espacial" /><b
+                >Corona Nova</b
+              ><small class="a-state">Nivel 7</small>
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom" id="bnav" aria-label="Secciones">
+        <button data-v="home"><span>🏠</span>Inicio</button><button data-v="temas"><span>📚</span>Temas</button
+        ><button data-v="juegos"><span>🎮</span>Juegos</button><button data-v="progreso"><span>📈</span>Progreso</button
+        ><button data-v="logros"><span>🏅</span>Logros</button>
+      </nav>
+
+      <!-- ============ PIE DE PÁGINA ============ -->
+      <footer class="credits" aria-label="Diseño y desarrollo">
+        <p class="credit-title">Diseño y desarrollo</p>
+        <div class="credit-names">
+          <span>Santiago Guzmán Herbas</span>
+          <span>Leonel Valencia Rodas</span>
+        </div>
+        <p class="copyright">© 2026 · Todos los derechos reservados</p>
+      </footer>
+
+      <!-- ============ ELEMENTOS FLOTANTES ============ -->
+      <div class="toast" id="toast" role="status"></div>
+      <canvas id="fx" aria-hidden="true"></canvas>
+
+      <div class="modal" id="modal">
+        <div class="box">
+          <!-- Fin de partida -->
+          <div id="mdFinish" class="md-panel hide">
+            <div class="medal" id="mdMedal">😊</div>
+            <h2 id="mdTitle"></h2>
+            <p class="big">Puntaje: <b id="mdScore">0</b> · Tiempo: <span id="mdSecs">0</span>s</p>
+            <p class="mut"><span id="mdExtra"></span> +<span id="mdXp">0</span> puntos de nivel</p>
+            <div class="row center">
+              <button class="btn p" id="m1" type="button">Jugar otra vez</button>
+              <button class="btn" id="m2" type="button">Otros juegos</button>
+            </div>
+          </div>
+          <!-- Confirmar curso -->
+          <div id="mdGrade" class="md-panel hide">
+            <h3>¿Eres de <span id="mgGrade">4</span>.º de Primaria, <span id="mgName"></span>?</h3>
+            <p class="mut">
+              Una vez que empieces, tu curso queda fijado y solo verás temas de ese grado. Para cambiarlo tendrías que borrar todo
+              tu progreso.
+            </p>
+            <div class="row center">
+              <button class="btn" id="gNo" type="button">Corregir</button>
+              <button class="btn p" id="gYes" type="button">Sí, es mi curso</button>
+            </div>
+          </div>
+          <!-- Confirmar borrado -->
+          <div id="mdReset" class="md-panel hide">
+            <h3>¿Borrar todo tu progreso?</h3>
+            <p class="mut">Se perderán puntos, logros y resultados de este dispositivo, y podrás elegir otro curso.</p>
+            <div class="row center">
+              <button class="btn" id="no" type="button">Cancelar</button>
+              <button class="btn p" id="yes" type="button">Sí, borrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/generadores.js"></script>
+    <script src="js/datos.js"></script>
+    <script src="js/interfaz.js"></script>
+    <script src="js/juegos.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
